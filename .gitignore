@@ -1,0 +1,17 @@
+# Virtual Env
+venv
+
+# DB
+db.sqlite3
+
+# IDE
+.idea
+
+# Python
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# macOS
+.DS_Store
