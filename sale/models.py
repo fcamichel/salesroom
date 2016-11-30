@@ -66,7 +66,7 @@ class Date(BaseMixIn):
             obj.save()
             final_msg = {
                 'room': str(self.id),
-                'message': [obj.product.title, str(obj.count_change),obj.created_at.strftime("%d.%m.%y %H:%M:%S")],
+                'message': [obj.id, obj.product.title, str(obj.count_change), obj.created_at.strftime("%d.%m.%y %H:%M:%S")],
                 'username': user.username,
                 'msg_type': MSG_TYPE_MESSAGE
             }

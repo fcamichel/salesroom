@@ -159,14 +159,16 @@
                     productdiv.append(product_msg);
                     productdiv.find(".sell button").unbind("click");
                     productdiv.find(".sell button").on("click", function () {
-                        socket.send(JSON.stringify({
-                            "command": "send",
-                            "room": data.room,
-                            "message": $(this).attr("id"),
-                            "msg_type": 7
-                        }));
-                        var countspan = $(this).parent().parent().children(".count");
-                        countspan.html(parseInt(countspan.text())-1);
+                        if ($(this).parent().siblings(".count").text() > "0") {
+                            socket.send(JSON.stringify({
+                                "command": "send",
+                                "room": data.room,
+                                "message": $(this).attr("id"),
+                                "msg_type": 7
+                            }));
+                            var countspan = $(this).parent().parent().children(".count");
+                            countspan.html(parseInt(countspan.text())-1);
+                        }
                         return false;
                     });
                     msgdiv.scrollTop(msgdiv.prop("scrollHeight"));
