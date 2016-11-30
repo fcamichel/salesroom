@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.six import python_2_unicode_compatible
 from channels import Group
 
-from .settings import MSG_TYPE_MESSAGE, MSG_TYPE_COUNT
+from .settings import MSG_TYPE_MESSAGE, MSG_TYPE_PRODUCTS, MSG_TYPE_COUNT
 
 
 class BaseMixIn(models.Model):
@@ -66,10 +66,26 @@ class Date(BaseMixIn):
             obj.save()
             final_msg = {
                 'room': str(self.id),
-                'message': [obj.id, obj.product.title, str(obj.count_change), obj.created_at.strftime("%d.%m.%y %H:%M:%S")],
+                'message': [obj.id, obj.product.title, obj.product.id, str(obj.count_change),
+                            obj.created_at.strftime("%d.%m.%y %H:%M:%S")],
                 'username': user.username,
                 'msg_type': MSG_TYPE_MESSAGE
             }
+            product = Product.objects.filter(pk=obj.product.id)
+            count_calculation = Activity.objects.filter(date__pk=self.id, product=product)\
+                .aggregate(models.Sum('count_change'))
+            self.websocket_group.send(
+                {"text": json.dumps(
+                    {
+                        'room': str(self.id),
+                        'message': [obj.product.title, obj.product.count + count_calculation["count_change__sum"],
+                                    obj.product.id],
+                        'username': user.username,
+                        'msg_type': MSG_TYPE_PRODUCTS
+
+                    }
+                )}
+            )
 
         # Send out the message to everyone in the room
         self.websocket_group.send(
