@@ -84,6 +84,7 @@ def sale_join(message):
     for activity in activities:
         date.send_message(
             [
+                activity.id,
                 activity.product.title,
                 str(activity.count_change),
                 activity.created_at.strftime("%d.%m.%y %H:%M:%S")

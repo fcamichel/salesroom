@@ -63,12 +63,31 @@
                     switch (data.msg_type) {
                         case 0:
                             // Message
-                            ok_msg = "<div class='message'>" +
-                                    "<span class='username'>" + data.username + "</span>" +
-                                    "<span class='product'>" + data.message[0] + "</span>" +
-                                    "<span class='change'>" + data.message[1] + "</span>" +
-                                    "<span class='date'>" + data.message[2] + "</span>" +
-                                    "</div>";
+                            available_activites = $("#room-" + data.room + " .messages .message");
+                            if (available_activites.length > 0) {
+                                var found = false;
+                                for(var i = 0; i < available_activites.length; i++) {
+                                    if (available_activites[i].id == data.message[0]) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found) {
+                                    ok_msg = "<div class='message' id='" + data.message[0] + "'>" +
+                                            "<span class='username'>" + data.username + "</span>" +
+                                            "<span class='product'>" + data.message[1] + "</span>" +
+                                            "<span class='change'>" + data.message[2] + "</span>" +
+                                            "<span class='date'>" + data.message[3] + "</span>" +
+                                            "</div>";
+                                 }
+                            } else {
+                                ok_msg = "<div class='message' id='" + data.message[0] + "'>" +
+                                            "<span class='username'>" + data.username + "</span>" +
+                                            "<span class='product'>" + data.message[1] + "</span>" +
+                                            "<span class='change'>" + data.message[2] + "</span>" +
+                                            "<span class='date'>" + data.message[3] + "</span>" +
+                                            "</div>";
+                            }
                             break;
                         case 1:
                             // Warning / Advice messages
@@ -98,12 +117,30 @@
                                     "</div>";
                             break;
                         case 6:
-                            // Product loading from backend
-                            product_msg = "<div class='product'>" +
-                                          "<span class='title'>" + data.message[0] + "</span>" +
-                                          "<span class='count'>" + data.message[1] + "</span>" +
-                                          "<span class='sell'><button id='" + data.message[2] + "'>-</button></span>" +
-                                          "</div>";
+                            available_products = $("#room-" + data.room + " .products .product");
+                            if (available_products.length > 0) {
+                                var found = false;
+                                for(var i = 0; i < available_products.length; i++) {
+                                    if (available_products[i].id == data.message[2]) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found) {
+                                    // Product loading from backend
+                                    product_msg = "<div class='product' id='" + data.message[2] + "'>" +
+                                                  "<span class='title'>" + data.message[0] + "</span>" +
+                                                  "<span class='count'>" + data.message[1] + "</span>" +
+                                                  "<span class='sell'><button id='" + data.message[2] + "'>-</button></span>" +
+                                                  "</div>";
+                                }
+                            } else {
+                                product_msg = "<div class='product' id='" + data.message[2] + "'>" +
+                                                  "<span class='title'>" + data.message[0] + "</span>" +
+                                                  "<span class='count'>" + data.message[1] + "</span>" +
+                                                  "<span class='sell'><button id='" + data.message[2] + "'>-</button></span>" +
+                                                  "</div>";
+                            }
                             break;
                         case 7:
                             // Product count change messages
